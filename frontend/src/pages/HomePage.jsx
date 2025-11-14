@@ -1,7 +1,27 @@
+import { useEffect, useState } from "react";
+
+
 export const HomePage = () => {
   // TODO: Integrar lógica para obtener superhéroes desde la API
   // TODO: Implementar useState para almacenar la lista de superhéroes
   // TODO: Implementar función para recargar superhéroes
+  const [loading,setLoading] = useState(true)
+  const [superHero,setSuperhero] = useState([])
+  const fetchHeros = async () => {
+    if(superHero.length === 0){
+      setLoading(true);
+    }
+    const res = await fetch("http://localhost:3000/api/superheroes",{
+      credentials:"include"
+    })
+    if(res.ok){
+      const data = await res.json();
+      setSuperhero(data.superHero || (Array.isArray(data) ? data : []))
+    } else {
+      console.log("Error al obtener superheroes")
+      setSuperhero([])
+    }
+  }
 
   // Datos de ejemplo para las cards
   const superheroes = [
@@ -53,7 +73,7 @@ export const HomePage = () => {
         <button
           onClick={() => {
             // TODO: Implementar función para recargar superhéroes
-            
+
           }}
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded transition-colors"
         >
