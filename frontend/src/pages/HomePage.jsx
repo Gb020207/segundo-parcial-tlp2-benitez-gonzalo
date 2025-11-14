@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Loading } from "../components/Loading";
 
 
 export const HomePage = () => {
@@ -6,71 +7,82 @@ export const HomePage = () => {
   // TODO: Implementar useState para almacenar la lista de superhéroes
   // TODO: Implementar función para recargar superhéroes
   const [loading,setLoading] = useState(true)
-  const [superHero,setSuperhero] = useState([])
+  const [superHeroslist,setSuperheros] = useState([])
   const fetchHeros = async () => {
-    if(superHero.length === 0){
+    try {
+       if(superHeroslist.length === 0){
       setLoading(true);
     }
     const res = await fetch("http://localhost:3000/api/superheroes",{
+      method:"GET",
       credentials:"include"
     })
+   
     if(res.ok){
       const data = await res.json();
-      setSuperhero(data.superHero || (Array.isArray(data) ? data : []))
+       console.log(data)
+      setSuperheros(data.superHeroslist || (Array.isArray(data) ? data : []))
     } else {
       console.log("Error al obtener superheroes")
-      setSuperhero([])
+      setSuperheros([])
     }
+    } catch (error) {
+      console.log(error)
+
+    } finally {
+      setLoading(false)
+    }
+   
   }
   useEffect(() => {
     fetchHeros()
   },[])
   // Datos de ejemplo para las cards
-  const superheroes = [
-    {
-      id: 1,
-      superhero: "Superman",
-      image:
-        "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/644-superman.jpg",
-    },
-    {
-      id: 2,
-      superhero: "Batman",
-      image:
-        "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/70-batman.jpg",
-    },
-    {
-      id: 3,
-      superhero: "Wonder Woman",
-      image:
-        "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/720-wonder-woman.jpg",
-    },
-    {
-      id: 4,
-      superhero: "Spider-Man",
-      image:
-        "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/620-spider-man.jpg",
-    },
-    {
-      id: 5,
-      superhero: "Iron Man",
-      image:
-        "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/346-iron-man.jpg",
-    },
-    {
-      id: 6,
-      superhero: "Captain America",
-      image:
-        "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/149-captain-america.jpg",
-    },
-  ];
+  // const superheroes = [
+  //   {
+  //     id: 1,
+  //     superhero: "Superman",
+  //     image:
+  //       "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/644-superman.jpg",
+  //   },
+  //   {
+  //     id: 2,
+  //     superhero: "Batman",
+  //     image:
+  //       "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/70-batman.jpg",
+  //   },
+  //   {
+  //     id: 3,
+  //     superhero: "Wonder Woman",
+  //     image:
+  //       "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/720-wonder-woman.jpg",
+  //   },
+  //   {
+  //     id: 4,
+  //     superhero: "Spider-Man",
+  //     image:
+  //       "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/620-spider-man.jpg",
+  //   },
+  //   {
+  //     id: 5,
+  //     superhero: "Iron Man",
+  //     image:
+  //       "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/346-iron-man.jpg",
+  //   },
+  //   {
+  //     id: 6,
+  //     superhero: "Captain America",
+  //     image:
+  //       "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/149-captain-america.jpg",
+  //   },
+  // ];
 
   return (
     <div className="container mx-auto px-4 pb-8">
       <h1 className="text-4xl font-bold text-center mt-8 mb-4 text-gray-800">
         Galería de Superhéroes
       </h1>
-
+      {loading && <Loading/>}
       <div className="flex justify-center mb-8">
         <button
           onClick={() => {
@@ -84,20 +96,20 @@ export const HomePage = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {superHero.map((hero) => (
+        {superHeroslist.map((data) => (
           <div
-            key={hero.id}
+            key={data.id}
             className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
           >
             <img
-              src={hero.image}
-              alt={hero.superhero}
+              src={data.image}
+              alt={data.superhero}
               className="h-64 object-cover w-full"
             />
 
             <div className="p-4">
               <h3 className="text-xl font-semibold text-gray-800">
-                {hero.superhero}
+                {data.superhero}
               </h3>
             </div>
           </div>
