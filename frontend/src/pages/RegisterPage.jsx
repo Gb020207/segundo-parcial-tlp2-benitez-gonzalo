@@ -22,11 +22,12 @@ export const RegisterPage = () => {
       body:JSON.stringify(formState)
     })
     const data = await res.json();
+    console.log(data)
     if(res.ok){
       navigate("/login")
     } else {
       alert(data.message || "Hubo un error al registrar")
-      handleReset
+      handleReset();
     }
    
     

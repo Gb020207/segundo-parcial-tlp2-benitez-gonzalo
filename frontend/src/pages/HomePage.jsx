@@ -22,7 +22,9 @@ export const HomePage = () => {
       setSuperhero([])
     }
   }
-
+  useEffect(() => {
+    fetchHeros()
+  },[])
   // Datos de ejemplo para las cards
   const superheroes = [
     {
@@ -73,7 +75,7 @@ export const HomePage = () => {
         <button
           onClick={() => {
             // TODO: Implementar función para recargar superhéroes
-
+              fetchHeros();
           }}
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded transition-colors"
         >
@@ -82,7 +84,7 @@ export const HomePage = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {superheroes.map((hero) => (
+        {superHero.map((hero) => (
           <div
             key={hero.id}
             className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
